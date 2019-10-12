@@ -1,16 +1,17 @@
-function work()
-{
+function work(ip) {
     const net = require('net');
     const readline = require('readline');
     let rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
+        prompt: ''
     })
     let client = new net.Socket();
     client.connect(ip[0]["port"], ip[0]["url"]);
 
     client.setEncoding('utf8');
     client.on('data', (chunk) => {
+        var inputing=buf.toString();
         console.log(chunk);
     })
     client.on('error', (e) => {
@@ -22,13 +23,11 @@ function work()
 }
 
 
-var fs=require('fs');
-var ip;
+const fs = require('fs');
 
-fs.readFile('./config.json',function(err,data){
-    if(err){
-        return console.log("FILE-ERROR:"+err);
+fs.readFile('./config.json', function (err, data) {
+    if (err) {
+        return console.log("FILE-ERROR:" + err);
     }
-    ip=JSON.parse(data.toString());
-    work();
+    work(JSON.parse(data.toString()));
 })

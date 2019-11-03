@@ -1,0 +1,9 @@
+[
+    {
+        "log": 1
+    },
+    {
+        "path": "./app/log.js",
+        "recv": "setTimeout(function(){\r\n    //value->argvs\r\n    //clientArr\r\n    //user_document\r\n    //user_id -> in clientArr\r\n    const app_name=\"log\";\r\n    const type_of_app=\"server\";\r\n    function server(){\r\n        console.log(`app ${app_name}:${value}`);\r\n        clientArr[user_id].write(`/app ${app_name} ${value}`);\r\n    }\r\n    function client()\r\n    {\r\n        console.log(`app ${app_name}: ${value}`);\r\n    }\r\n    eval(`${type_of_app}()`);\r\n},0)"
+    }
+]

@@ -1,0 +1,84 @@
+login successful!
+/app 0 nmslslsl
+Error: read ECONNRESET
+
+Error [ERR_STREAM_DESTROYED]: Cannot call write after a stream was destroyed
+
+Error [ERR_STREAM_DESTROYED]: Cannot call write after a stream was destroyed
+
+Error [ERR_STREAM_DESTROYED]: Cannot call write after a stream was destroyed
+
+Error [ERR_STREAM_DESTROYED]: Cannot call write after a stream was destroyed
+
+Error [ERR_STREAM_DESTROYED]: Cannot call write after a stream was destroyed
+login successful!
+/app 0 nmsl
+nmzslsaa
+/app 0 nmsl nmslslsl
+login successful!
+/client get \\SD-20191003TOBS\share\0.jpg
+login successful!
+/client get file://sd-20191003tobs/share/0.jpg
+login successful!
+/app 0 tryry rty
+/app 0 tryry rty
+Error: read ECONNRESET
+login successful!
+/app 0 rtytytyty nmslslslsl
+/app 0 rtytytyty nmslslslsl
+Error: read ECONNRESET
+login successful!
+/app 0 nmssssl
+/app 0 nmssssl
+login successful!
+/app 0 nmsl-- read from cmd
+login successful!
+/app 0 nmsl-ry
+/app 0 nmsl-ry
+login successful!
+/app 0 nmsl
+/app 0 nmsl
+Error: read ECONNRESET
+login successful!
+/app 0 nmslslsl
+/app 0 nmslslsl
+login successful!
+/app 0 nmsm
+unknown command!
+Error: read ECONNRESET
+login successful!
+/app log nmsl
+Error: read ECONNRESET
+Error: connect ECONNREFUSED 127.0.0.1:6801
+login successful!
+/app log tryryry
+Error: read ECONNRESET
+login successful!
+/app log nmsl
+Error: read ECONNRESET
+login successful!
+/app log sryry
+Error: read ECONNRESET
+login successful!
+/app log sryry
+/app 0 sryry
+login successful!
+/app log nmslr rty
+Error: read ECONNRESET
+login successful!
+/app log ssy
+/app log ssy
+/server close
+close in 1 sec
+Error: read ECONNRESET
+login successful!
+/app 0 nmslsl
+unknown command!
+/app log nmslsl
+/app log nmslsl
+login successful!
+/app log nmsl sl
+/app log nmsl sl
+/server close
+close in 1 sec
+Error: read ECONNRESET

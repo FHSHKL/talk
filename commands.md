@@ -1,15 +1,15 @@
 ## server
-`/logon <username> <password>`
-`/login <username> <password>`
-`/logout`
-`/set <"user_name"|"user_pasw"> <username|password>`
-`/send <username> <message1> <message2> ...`
-`/app <app_name> <command>`
+- `/logon <username> <password>`
+- `/login <username> <password>`
+- `/logout`
+- `/set <"user_name"|"user_pasw"> <username|password>`
+- `/send <username> <message1> <message2> ...`
+- `/app <app_name> <command>`
 ### server-admin
-`/file <file_dir>`
-`/server get <file_url>`
-`/server save`
-`/server close`
+- `/file <file_dir>`
+- `/server get <file_url>`
+- `/server save`
+- `/server close`
 ### user-document
 ```javascript
 [
@@ -22,9 +22,9 @@
 ```
 
 ## client
-`/cls`
-`/client get <file_url>`
-`/app <app_name> <command>`
+- `/cls`
+- `/client get <file_url>`
+- `/app <app_name> <command>`
 ### config.json
 ```javascript
 [{

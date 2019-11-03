@@ -7,7 +7,7 @@ const readline = require('readline');
 let client = new net.Socket();
 
 var app = [];
-const app_type="client_init()";
+const app_type = "client_init()";
 var in_app;
 
 function md5(str) {
@@ -165,13 +165,10 @@ function get_file(file) {
     return fs.readFileSync(file, 'utf-8');
 }
 
-function get_app(value)
-{
-    for(var i=1;i<app.length;i++)
-    {
-        if(app[i].app_name==value)
-        {
-            app[i].data={};
+function get_app(value) {
+    for (var i = 1; i < app.length; i++) {
+        if (app[i].app_name == value) {
+            app[i].data = app[i].data || {};
             return i;
         }
     }
@@ -215,23 +212,21 @@ function work_command(a) {
         };
         return false;
     }
-    if (a.match(/\/(login|logon|set) [0-9|a-z]+ [0-9|a-z]+/ig)) {
-        var res = a.match(/(\/(login|logon|set)|[0-9|a-z]+)/ig);
+    if (a.match(/\/(login|logon|set) [0-9|a-z|_]+ [0-9|a-z]+/ig)) {
+        var res = a.match(/(\/login|\/logon|\/set)|[0-9|a-z|_]+/ig);
         var user_name = res[1];
         var user_pasw = md5(res[2]);
         client.write(`${res[0]} ${user_name} ${user_pasw}`);
         return false;
     }
-    if(a.match(/\/app [a-z]+ [\S]+/ig))
-    {
-        var res=a.match(/(\/app|[a-z]+)/ig);
-        app[0][res[1]]=app[0][res[1]]||get_app(res[1]);
-        var apid=app[0][res[1]];
-        var value=a.replace(/\/app [a-z]+ /ig,'');
-        const type_of_data="data";
-        if(app[apid].path!=undefined)
-        {
-            app[apid].recv=app[apid].recv||get_file(app[apid].path);
+    if (a.match(/\/app [a-z]+ [\S]+/ig)) {
+        var res = a.match(/(\/app|[a-z]+)/ig);
+        app[0][res[1]] = app[0][res[1]] || get_app(res[1]);
+        var apid = app[0][res[1]];
+        var value = a.replace(/\/app [a-z]+ /ig, '');
+        const type_of_data = "data";
+        if (app[apid].path != undefined) {
+            app[apid].recv = app[apid].recv || get_file(app[apid].path);
             eval(app[apid].recv);
         }
         return false;
@@ -268,8 +263,8 @@ function work(ip) {
     rl.on('line', (mes) => {
         write_log(mes);
         if (in_app) {
-            var value=mes;
-            const type_of_data="read";
+            var value = mes;
+            const type_of_data = "read";
             eval(app[app[0][in_app]].recv);
         } else
             if (mes[0] != '/' || work_command(mes)) {

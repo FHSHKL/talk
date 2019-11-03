@@ -240,3 +240,182 @@ talk
 /server close
 close in 1 sec
 Error: read ECONNRESET
+login successful!
+/app add run
++=5
+/app add 715827887.3333334
+=0
+/app add 0
+exit
+/cls
+/set user_name admin
+used name!
+/set user_name user1
+used name!
+/set user_name fhs
+user_name set successful!
+/set user_name admin
+user_name set successful!
+/cls
+/logout
+logout successful!
+/login admin fhs
+login successful!
+/cls
+/set user_pasw fff
+user_pasw set successful!
+/logout
+logout successful!
+/login admin fhs
+wrong username or password!
+/login admin fff
+wrong username or password!
+Error: read ECONNRESET
+login successful!
+/set user_pasw fhs
+user_pasw set successful!
+/logout
+logout successful!
+/login admin fhs
+/login admin fhs
+wrong username or password!
+/login admin fhs
+wrong username or password!
+/login admin fff
+wrong username or password!
+/login admin fhs
+wrong username or password!
+/login user1 user
+login successful!
+/logout
+logout successful!
+/cls
+/login admin fhs
+wrong username or password!
+Error: read ECONNRESET
+login successful!
+/set user_pasw fff
+user_pasw set successful!
+/logout
+logout successful!
+/login admin fff
+wrong username or password!
+/login admin fhs
+wrong username or password!
+login successful!
+/set user_pasw ff
+user_pasw set successful!
+/logout
+logout successful!
+/login admin ff
+login successful!
+/set user_pasw fhs
+user_pasw set successful!
+/server close
+close in 1 sec
+Error: read ECONNRESET
+login successful!
+/logout
+logout successful!
+exit
+login successful!
+exit
+/cls
+/login user1 user
+login successful!
+dkdk
+user1:dkdk
+login successful!
+/app add run
+*=5
+/app add 3579139411.666667
+=0
+/app add 0
+exit
+/app add 0
++5
+message
+Error: read ECONNRESET
+login successful!
+/app add run
++0
+/app add 715827882.3333334
+=0
+/app add 0
+login successful!
+/app add run
++0
+/app add 715827882.3333334
+=0
+/app add 0
+exit
+/app add 0
+message
+login successful!
+/app add run
+=0
+/app add 0
++=1
+/app add 1
+exit
+/app add 1
+Error: read ECONNRESET
+login successful!
+/app add run
+=0
+/app add 0
+exit
+Error: read ECONNRESET
+login successful!
+/app add run
++=5
+/app add 5
+exit
+/app add 5
+Error: read ECONNRESET
+login successful!
+/app add $updata
+/app add error:TypeError: app[app[0][app_name]].data.value$updata is not a function
+/app add error:SyntaxError: Unexpected token ':'
+/app add run
+$updata
+/app add error:TypeError: app[app[0][app_name]].data.value$updata is not a function
+/app add error:SyntaxError: Unexpected token ':'
+login successful!
+/app add $updata
+/app add error:TypeError: app[app[0][app_name]].data.value$updata is not a function
+/app add error:SyntaxError: Unexpected token ':'
+login successful!
+/app add run
++=5
+/app add 5
+exit
+Error: read ECONNRESET
+login successful!
+/app add run
++=5
+/app add 5
+exit
+Error: read ECONNRESET
+login successful!
+/app add run
++=5
+/app add 5
+exit
+Error: read ECONNRESET
+login successful!
+/app add run
++=5
+/app add 5
+exit
+Error: read ECONNRESET
+login successful!
+/app add run
++=5
+/app add 5
+exit
+login successful!
+/app add run
++=5
+/app add 5
+exit

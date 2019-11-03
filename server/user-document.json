@@ -1,1 +1,12 @@
-[{"user_name":"admin","user_pasw":"6114a2fdd96b56c50815f0501291f955","message":[]},{"user_name":"user1","user_pasw":"ee11cbb19052e40b07aac0ca060c23ee","message":[]}]
+[
+    {
+        "user_name": "admin",
+        "user_pasw": "6114a2fdd96b56c50815f0501291f955",
+        "message": []
+    },
+    {
+        "user_name": "user1",
+        "user_pasw": "ee11cbb19052e40b07aac0ca060c23ee",
+        "message": []
+    }
+]

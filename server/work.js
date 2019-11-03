@@ -5,6 +5,7 @@ const http = require('http');
 const https = require('https');
 var user_document;
 var app=[];
+const app_type="server_init()";
 let clientArr = [];
 
 function get_file(file) {
@@ -115,6 +116,18 @@ function save()
     });
 }
 
+function get_app(value)
+{
+    for(var i=1;i<app.length;i++)
+    {
+        if(app[i].app_name==value)
+        {
+            return i;
+        }
+    }
+    return 0;
+}
+
 function work_command(a, user_id) {
     if (a.match(/\/logon [0-9|a-z]+ [0-9|a-z]+/ig)) {
         return logon(a, user_id);
@@ -126,7 +139,7 @@ function work_command(a, user_id) {
     if (a.match(/\/logout/ig)) {
         return logout(a, user_id);
     }
-    if (a.match(/\/set (user_name|userpasw) [0-9|a-z]+/ig)) {
+    if (a.match(/\/set (user_name|user_pasw) [0-9|a-z]+/ig)) {
         return log_set(a, user_id);
     }
     if (a.match(/\/send [0-9|a-z]+ [\S]+/ig)) {
@@ -135,8 +148,10 @@ function work_command(a, user_id) {
     if(a.match(/\/app [a-z]+ [\S]+/ig))
     {
         var res=a.match(/(\/app|[a-z]+)/ig);
+        app[0][res[1]]=app[0][res[1]]||get_app(res[1]);
         var apid=app[0][res[1]];
         var value=a.replace(/\/app [a-z]+ /ig,'');
+        const type_of_data="data";
         if(app[apid].path!=undefined)
         {
             app[apid].recv=app[apid].recv||get_file(app[apid].path);
@@ -228,34 +243,3 @@ function server_work() {
 user_document = JSON.parse(fs.readFileSync('user-document.json', function (err) {if (err) {return console.log("FILE-ERROR:" + err);}}).toString());
 app=JSON.parse(fs.readFileSync('app-document.json', function (err) {if (err) {return console.log("FILE-ERROR:" + err);}}).toString());
 server_work();
-/*
-fs.readFile('', function (err, data) {
-    if (err) {
-        return console.log("FILE-ERROR:" + err);
-    }
-    user_document = ;
-    server_work();
-})
-*/
-/*
-
----user
-
-/login admin fhs
-/server get https://huokulou.tk/static/js/effect.js
-
----user-document.json
-
-[{
-    "user_name":"admin",
-    "user_pasw":"fhs",
-    "message":[]
-}]
-
-[{
-    "user_name":"admin",
-    "user_pasw":"fhs",
-    "message":[]
-}]
-
-*/

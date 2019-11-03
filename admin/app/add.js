@@ -9,15 +9,18 @@ setTimeout(function(){
         clientArr[user_id].write(`/app ${app_name} ${message}`);
     }
     function server_init(){
+        if(app[app[0][app_name]].data.value==undefined)
+        {
+            app[app[0][app_name]].data.value=0;
+        }
         //console.log(`app ${app_name}:${value}`);
-        var result;
         try{
-            result=eval(value);
+            eval("app[app[0][app_name]].data.value"+value);
+            send_to_client(app[app[0][app_name]].data.value);
         }
         catch(err){
-            result=`error:${err}`;
+            send_to_client(`error:${err}`);
         }
-        send_to_client(result);
     }
     function client_init()
     {
@@ -25,7 +28,7 @@ setTimeout(function(){
         if(value=="exit")in_app=undefined;
         if(type_of_data=="read")
         {
-            if(value.match(/^[0-9|\+|\-|\*|\/|\%| |\.|\^|\&|\|]/ig))return;
+            if(value.match(/[^0-9|\+|\-|\*|\/|\%| |\.|\^|\&|\||=]/ig))return;
             send_to_server(value);
         }
         if(type_of_data=="data")

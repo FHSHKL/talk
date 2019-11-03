@@ -171,6 +171,7 @@ function get_app(value)
     {
         if(app[i].app_name==value)
         {
+            app[i].data={};
             return i;
         }
     }

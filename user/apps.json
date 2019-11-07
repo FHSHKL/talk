@@ -1,0 +1,8 @@
+[
+    {
+    },
+    {
+        "app_name":"add",
+        "path":"./app/add.js"
+    }
+]

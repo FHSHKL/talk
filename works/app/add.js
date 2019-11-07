@@ -1,8 +1,10 @@
 setTimeout(function () {
     const app_name = "add";
+    /*
     function updata() {
         app[app[0][app_name]].recv = undefined;
     }
+    */
     function send_to_server(message) {
         client.write(`/app ${app_name} ${message}`);
     }
@@ -18,13 +20,8 @@ setTimeout(function () {
             app[app[0][app_name]].data.value = 0;
         }
         //console.log(`app ${app_name}:${value}`);
-        try {
-            eval("app[app[0][app_name]].data.value" + value);
-            send_to_client(app[app[0][app_name]].data.value);
-        }
-        catch (err) {
-            send_to_client(`error:${err}`);
-        }
+        eval("app[app[0][app_name]].data.value" + value);
+        send_to_client(app[app[0][app_name]].data.value);
     }
     function client_init() {
         if (value.match(/\$/ig)) send_to_server(`${value}()`);

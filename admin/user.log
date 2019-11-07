@@ -419,3 +419,82 @@ login successful!
 +=5
 /app add 5
 exit
+login successful!
+/logout
+logout successful!
+/login admin fhs
+login successful!
+/cks
+unknown command!
+/cls
+/app add run
+=0
+/app add 0
++=5
+/app add 5
++=10
+/app add 15
+/=0
+/app add Infinity
+exec("whoami")
+
+unknown command!
+run = exec("whoami")
+run = exec("pause")
+
+unknown command!
+run = exec("shutdown -h")
+exit
+/cls
+/server close
+close in 1 sec
+Error: read ECONNRESET
+login successful!
+ls
+/run
+unknown command!
+/app add run
+\=0
+/=0
+/app add NaN
+ls
+ls
+=0
+/app add 0
+=1
+/app add 1
+&&&
+/app add error:SyntaxError: Unexpected token '&'
+exit
+/server close
+close in 1 sec
+Error: read ECONNRESET
+login successful!
+a:ls
+test
+a:ls
+a:ls
+a:sl
+a:sls
+a:ls
+a:l
+不要复读
+/send a pri
+/send a 私信测试
+Error: read ECONNRESET
+login successful!
+/log out
+unknown command!
+/logout
+logout successful!
+/login user1 user
+login successful!
+login successful!
+/server close
+close in 1 sec
+Error: read ECONNRESET
+login successful!
+/server save
+unknown command!
+/server close
+Error: read ECONNRESET

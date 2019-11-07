@@ -27,6 +27,7 @@ function logon(a, user_id) {
     var now_user = {
         "user_name": res[1],
         "user_pasw": res[2],
+        "log": -1,
         "message": []
     }
     for (var i = 0; i < user_document.length; i++) {
@@ -36,6 +37,7 @@ function logon(a, user_id) {
         }
     }
     user_document.push(now_user);
+
     return "logon successful!";
 }
 
@@ -52,8 +54,9 @@ function login(a, user_id) {
         var val = user_document[i];
         if (val.user_name == now_user.user_name) {
             if (val.user_pasw == now_user.user_pasw) {
-                if (clientArr[user_id].log > -1) return "user have log on another client!";
+                if (user_document[i].log > -1) return "user have log on another client!";
                 clientArr[user_id].log = i;
+                user_document[i].log = user_id;
                 setTimeout(function () { check_message(user_id) }, 500);
                 return "login successful!";
             }
@@ -63,6 +66,7 @@ function login(a, user_id) {
 }
 
 function logout(a, user_id) {
+    user_document[clientArr[user_id].log].log = -1;
     clientArr[user_id].log = -1;
     return "logout successful!";
 }
@@ -102,6 +106,9 @@ function send(a, user_id) {
 
 function save() {
     console.log("saving");
+    user_document.forEach((val) => {
+        val.log = -1;
+    });
     fs.writeFile('user-document.json', JSON.stringify(user_document), function (err) {
         if (err) {
             return console.log("FILE-ERROR:" + err);
@@ -131,7 +138,7 @@ function work_command(a, user_id) {
     if (a.match(/\/login [0-9|a-z]+ [0-9|a-z]+/ig)) {
         return login(a, user_id);
     }
-    if (clientArr[user_id].log < 0) return "pleash login first!";
+    if (clientArr[user_id].log < 0) return "please login first!";
     if (a.match(/\/logout/ig)) {
         return logout(a, user_id);
     }
@@ -154,12 +161,14 @@ function work_command(a, user_id) {
         return "";
     }
     if (user_document[clientArr[user_id].log].user_name != "admin") return "unknown command!";
+    /*
     if (a.match(/\/file [\S]+/ig)) {
         var res = a.match(/(\/file|[\S]+)/ig);
         var command = get_file(res[1]);
         eval(`setTimeout(function(){${command}},0)`);
         return "";
     }
+    */
     if (a.match(/\/server get [\S]+/ig)) {
         var res = a.match(/(\/server|get|[\S]+)/ig);
         var url = res[2];
@@ -225,9 +234,15 @@ function server_work() {
             }
         });
         person.on('close', (p1) => {
+            if (p1.id > -1) {
+                user_document[p1.id].log = -1;
+            }
             clientArr.splice(p1.id, 1);
         });
         person.on('error', (p1) => {
+            if (p1.id > -1) {
+                user_document[p1.id].log = -1;
+            }
             clientArr.splice(p1.id, 1);
         });
     });

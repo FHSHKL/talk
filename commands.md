@@ -10,6 +10,7 @@
 - `/server get <file_url>`
 - `/server save`
 - `/server close`
+- `/command <command>`
 ### user-document
 ```javascript
 [

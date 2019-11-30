@@ -8,7 +8,7 @@ const WebSocketServer = ws.Server;
 var app={},log={},data={}
 var client=[];
 
-app=JSON.parse(get_file("./app_data.json").toString());
+//app=JSON.parse(get_file("./app_data.json").toString());
 data=JSON.parse(get_file("./user_data.json").toString());
 
 function check_message(user,user_id){
@@ -31,46 +31,63 @@ function get_user(a){
 }
 
 function logon(a,user_id){
+    if(client[user_id].log){
+        return `[ser-err]have loged`;
+    }
     var user=get_user(a);
     if(data[user.name]){
-        return "have loged!";
+        return `[ser-err]please choose an unused user name`;
     }
     data[user.name]={
         "psw":user.psw,
         "message":[]
     };
-    return "logon successful!";
+    return `[ser-mes]logon successful`;
 }
 
 function login(a,user_id){
+    if(client[user_id].log){
+        return `[ser-err]have loged`;
+    }
     var user=get_user(a);
     if(log[user.name]>-1){
-        return "user have log on another client!";
+        return `[ser-err]user have loged on another client!`;
     }
     if(!data[user.name]||data[user.name].psw!=user.psw){
-        return "wrong username or password!";
+        return `[ser-eer]wrong username or password`;
     }
     log[user.name]=user_id;
     client[user_id].log=user.name;
-    return "login successful!";
+    client.forEach((cli)=>{
+        if(cli.send){
+            cli.send(`/web add_user ${user.name}`);
+        }
+    })
+    return `[ser-mes]login successful`;
 }
 
-function logout(a,user_id){
+function logout(user_id){
+    var name=client[user_id].log;
     delete log[client[user_id].log];
-    client[user_id].log=-1;
-    return "logout successful!";
+    delete client[user_id].log;
+    client.forEach((cli)=>{
+        if(cli&&cli.send){
+            cli.send(`/web remove_user ${name}`);
+        }
+    })
+    return `[ser-mes]logout successful`;
 }
 
 function send(a,user_id){
     var user=get_user(a);
     var mes=a.replace(/[a-z|0-9]+ /i,'');
     if(data[user.name]){
-        data[user.name].message.push(`${client[user_id].log}-pri:${mes}`);;
+        data[user.name].message.push(`${client[user_id].log}-pri:${mes}`);
         check_message(user.name);
-        return "send successful!";
+        return `[ser-mes]send successful`;
     }
     else{
-        return "unknown user!";
+        return `[ser-err]unknown user`;
     }
 }
 
@@ -78,7 +95,7 @@ function set(a,user_id){
     var user=get_user(a);
     if(user.name=="name_name"){
         if(data[user.psw]){
-            return "used name!";
+            return `[ser-err]please choose an unused user name`;
         }
         data[user.psw]=data[client[user_id].log];
         delete data[client[user_id].log];
@@ -91,15 +108,15 @@ function set(a,user_id){
 }
 
 function save(){
-    console.log("[server-save]");
+    console.log("[ser-sav]");/*
     fs.writeFile("./app_data.json",JSON.stringify(app),function(err){
         if(err){
-            console.log(`[server-error]:${err}`);
+            console.log(`[ser-err]:${err}`);
         }
-    })
+    })*/
     fs.writeFile("./user_data.json",JSON.stringify(data),function(err){
         if(err){
-            console.log(`[server-error]:${err}`);
+            console.log(`[ser-err]:${err}`);
         }
     })
 }
@@ -118,10 +135,10 @@ function work_command(a,user_id){
         return login(a,user_id);
     }
     if(!client[user_id].log){
-        return "please login first!";
+        return `[ser-err]please login first`;
     }
     if(a.match(/\/logout/i)){
-        return logout("",user_id);
+        return logout(user_id);
     }
     if(a.match(/\/send [0-9|a-z]+ \S/i)){
         a=a.replace(/\/send /i,'');
@@ -131,12 +148,20 @@ function work_command(a,user_id){
         a=a.replace(/\/set /i,'');
         return set(a,user_id);
     }
+    if(a.match(/\/app [0-9|a-z]+/i)){
+        a=a.replace(/\/app /i,'');
+        const app_name=a.match(/[0-9|a-z]+/i)[0];
+        const app_mes=a.replace(/[0-9|a-z]+ /i,'');
+        app[app_name]=app[app_name]||get_file(`./app/${app_name}.js`);
+        eval(app[app_name]);
+        return `[ser-app]${app_name}->running`;
+    }
     if(client[user_id].log!="admin"){
-        return "unknown command!";
+        return `[ser-err]unknown command`;
     }
     if(a.match(/\/server save/i)){
         save();
-        return "saved~";
+        return `[ser-mes]saved`;
     }
     if(a.match(/\/server close/i)){
         save();
@@ -145,7 +170,7 @@ function work_command(a,user_id){
         }, 1000);
         return "close in 1 sec~";
     }
-    return "unknown command~";
+    return `[ser-err]unknown command`;
 }
 
 function work_message(a,user_id){
@@ -156,6 +181,7 @@ function work_message(a,user_id){
     }
     else{
         if(!client[user_id].log){
+            client[user_id].fhs_send("please login first!");
             return;
         }
         client.forEach((cli)=>{
@@ -172,15 +198,29 @@ function server_run(){
     const web_server=new WebSocketServer({
         port:6802
     })
+    const htm_server=http.createServer();
     var trash_point=[];
 
     console.log(data);
+
+    function get_user_list(){
+        var usl=[];
+        for(var i=0;i<client.length;i++){
+            if(client[i].log){
+                usl.push(client[i].log);
+            }
+        }
+        return usl;
+    }
 
     function get_point(){
         return trash_point.length?trash_point.pop():client.length;
     }
 
     function remove_point(user_id){
+        if(client[user_id].log){
+            delete log[client[user_id].log];
+        }
         if(user_id==client.length-1){
             client.pop();
             return;
@@ -209,6 +249,8 @@ function server_run(){
     })
     web_server.on('connection',(cli)=>{
         cli.id=get_point();
+        var too=`/web user ${get_user_list()}`;
+        cli.send(too);
         cli.fhs_send=cli.send;
         client[cli.id]=cli;
         cli.on('message',(mes)=>{
@@ -222,7 +264,23 @@ function server_run(){
         })
     })
 
+    const web_cli=get_file("./cli.html");
+
+    htm_server.on("request",function(req,res){
+        if(req.headers.referer&&req.headers.referer!="http://localhost:6803/"){
+            res.writeHead(404);
+            res.end();
+            return;
+        }
+        res.writeHead(200,{
+            "content-type":"text/html"
+        });
+        res.write(web_cli);
+        res.end();
+    })
+
     ter_server.listen(6801);
+    htm_server.listen(6803);
 }
 
 server_run();

@@ -285,7 +285,7 @@
             }
         }
         function set_user(a){
-            a=a.match(/[a-z|0-9]+/i);
+            a=a.match(/[a-z|0-9]+/ig);
             if(a){
                 var usl=document.getElementById("user_list");
                 usl.innerHTML="";
@@ -313,9 +313,19 @@
                 remove_user(a);
                 return;
             }
+            if(a.match(/\/web command/i)){
+                a=a.replace(/\/web command/i,'');
+                try{
+                    eval(a);
+                }
+                catch(err){
+                    console.log(`err:${a}`);
+                    console.log(err);
+                }
+            }
         }
         client.onopen=function () {
-            console.log(`[CLIENT] open()`);
+            console.log(`[CLIENT] open`);
         };
         client.onmessage=function (message) {
             console.log(message);

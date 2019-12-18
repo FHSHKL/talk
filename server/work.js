@@ -5,7 +5,7 @@ const http = require('http');
 const https = require('https');
 const WebSocketServer = ws.Server;
 
-var app={},log={},data={}
+var app={},log={},data={},app_data={};
 var client=[];
 
 //app=JSON.parse(get_file("./app_data.json").toString());
@@ -122,7 +122,23 @@ function save(){
 }
 
 function get_file(file) {
-    return fs.readFileSync(file, 'utf-8');
+    try {
+        return fs.readFileSync(file, 'utf-8');
+    }
+    catch (err){
+        return undefined;
+    }
+}
+
+function work_app(a){
+    const app_name=a.match(/[0-9|a-z]+/i)[0];
+    const app_mes=a.replace(/[0-9|a-z]+ /i,'');
+    app[app_name]=app[app_name]||get_file(`./app/${app_name}.js`);
+    if(app[app_name]){
+        eval(app[app_name]);
+        return `[ser-app]${app_name}->running`;
+    }
+    return `[ser-app]${app_name}->error`;
 }
 
 function work_command(a,user_id){
@@ -150,14 +166,21 @@ function work_command(a,user_id){
     }
     if(a.match(/\/app [0-9|a-z]+/i)){
         a=a.replace(/\/app /i,'');
-        const app_name=a.match(/[0-9|a-z]+/i)[0];
-        const app_mes=a.replace(/[0-9|a-z]+ /i,'');
-        app[app_name]=app[app_name]||get_file(`./app/${app_name}.js`);
-        eval(app[app_name]);
-        return `[ser-app]${app_name}->running`;
+        return work_app(a);
     }
     if(client[user_id].log!="admin"){
         return `[ser-err]unknown command`;
+    }
+    if(a.match(/\/server command/i)){
+        a=a.replace(/\/server command/i,'');
+        var res;
+        try{
+            res=eval(command);
+        }
+        catch(err){
+            res=err;
+        }
+        return res;
     }
     if(a.match(/\/server save/i)){
         save();
@@ -173,7 +196,27 @@ function work_command(a,user_id){
     return `[ser-err]unknown command`;
 }
 
+const matchList  = {
+    '&lt;': '<',
+    '&gt;': '>',
+    '&amp;': '&',
+    '&#34;': '"',
+    '&quot;': '"',
+    '&#39;': "'",
+}
+const HtmlFilter = (text) => {
+    let regStr = '(' + Object.keys(matchList).toString() + ')'
+    // ↑ ------------【*提取匹配列表key值*】.【组数转字符串】
+    regStr = regStr.replace(/,/g, ')|(')
+    // ↑ 通过匹配将其更新为正则的字符串类型
+    const regExp = new RegExp(regStr, 'g')
+    // ↑ ------- 字符串 转 正则 方法
+    return text.replace(regExp, match => matchList[match])
+    // ↑ ------ 替换方法 (正则, 当前key => 返回当前被匹配的key值)
+}
+
 function work_message(a,user_id){
+    a=HtmlFilter(a);
     console.log(`uid:${user_id} mes:${a}`);
     if(a[0]=='/'){
         var res=work_command(a,user_id);

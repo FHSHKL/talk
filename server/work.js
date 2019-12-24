@@ -133,7 +133,7 @@ function get_file(file) {
 function work_app(a){
     const app_name=a.match(/[0-9|a-z]+/i)[0];
     const app_mes=a.replace(/[0-9|a-z]+ /i,'');
-    app[app_name]=app[app_name]||get_file(`./app/${app_name}.js`);
+    app[app_name]=app[app_name]||get_file(`./app/${app_name}/${app_name}.js`);
     if(app[app_name]){
         eval(app[app_name]);
         return `[ser-app]${app_name}->running`;
@@ -307,10 +307,11 @@ function server_run(){
         })
     })
 
-    const web_cli=get_file("./cli.html");
+    const web_cli=get_file("./cli.html").replace(/\t|\n/ig,'');
 
     htm_server.on("request",function(req,res){
-        if(req.headers.referer&&req.headers.referer!="http://localhost:6803/"){
+        console.log(req.connection.remoteAddress);
+        if(req.headers.referer&&req.headers.referer!="http://192.168.44.96:6803/"){
             res.writeHead(404);
             res.end();
             return;

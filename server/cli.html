@@ -122,7 +122,33 @@
         }
     </style>
 
+</head>
+
+<body>
+    <div class="main">
+        <div class="side-bar">
+            <div class="icon"><h2>Message</h2></div>
+            <div id="user_list" class="user-lists">
+            </div>
+        </div>
+        <div class="content">
+            <div id="content" class="mess">
+            </div>
+            <div class="sen">
+                <textarea id="mes"></textarea>
+                <div class="but" onclick="send()">send</button>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
+        function cli_init(){
+            document.getElementById("mes").onkeypress=function(e){
+                if(e.key=="Enter"){
+                    send();
+                }
+            }
+        }
+        cli_init();
         function md5(str) {
             var hexcase = 0;
             var chrsz = 8;
@@ -346,29 +372,9 @@
                     mes.value=`${res[0]} ${res[1]} ${res[2]}`;
                 }
             }
-            client.send(mes.value);
             mes.value="";
         }
     </script>
-
-</head>
-
-<body>
-    <div class="main">
-        <div class="side-bar">
-            <div class="icon"><h2>Message</h2></div>
-            <div id="user_list" class="user-lists">
-            </div>
-        </div>
-        <div class="content">
-            <div id="content" class="mess">
-            </div>
-            <div class="sen">
-                <textarea id="mes"></textarea>
-                <div class="but" onclick="send()">send</button>
-            </div>
-        </div>
-    </div>
     <!--
     <textarea id="data"></textarea>
     <button onclick="sendd()">send</button>

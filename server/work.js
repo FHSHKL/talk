@@ -8,8 +8,8 @@ const WebSocketServer = ws.Server;
 var app={},log={},data={},app_data={};
 var client=[];
 
-//app=JSON.parse(get_file("./app_data.json").toString());
-data=JSON.parse(get_file("./user_data.json").toString());
+app_data=JSON.parse((get_file("./app_data.json")||"{}").toString());
+data=JSON.parse((get_file("./user_data.json")||"{}").toString());
 
 function check_message(user,user_id){
     if(log[user]!=undefined){
@@ -108,12 +108,12 @@ function set(a,user_id){
 }
 
 function save(){
-    console.log("[ser-sav]");/*
-    fs.writeFile("./app_data.json",JSON.stringify(app),function(err){
+    console.log("[ser-sav]");
+    fs.writeFile("./app_data.json",JSON.stringify(app_data),function(err){
         if(err){
             console.log(`[ser-err]:${err}`);
         }
-    })*/
+    })
     fs.writeFile("./user_data.json",JSON.stringify(data),function(err){
         if(err){
             console.log(`[ser-err]:${err}`);
@@ -123,22 +123,28 @@ function save(){
 
 function get_file(file) {
     try {
-        return fs.readFileSync(file, 'utf-8');
+        return fs.readFileSync(file,'utf-8');
     }
     catch (err){
         return undefined;
     }
 }
 
-function work_app(a){
+function work_app(a,user_id){
     const app_name=a.match(/[0-9|a-z]+/i)[0];
     const app_mes=a.replace(/[0-9|a-z]+ /i,'');
-    app[app_name]=app[app_name]||get_file(`./app/${app_name}/${app_name}.js`);
+    const user_name=client[user_id].log;
+    app[app_name]=app[app_name]||get_file(`./app/${app_name}/index.js`);
     if(app[app_name]){
-        eval(app[app_name]);
-        return `[ser-app]${app_name}->running`;
+        try{
+            eval(app[app_name]);
+        }
+        catch(err){
+            return `[ser-app]error->${err}`;
+        }
+        return; 
     }
-    return `[ser-app]${app_name}->error`;
+    return `[ser-app]${app_name}->err`;
 }
 
 function work_command(a,user_id){
@@ -166,7 +172,7 @@ function work_command(a,user_id){
     }
     if(a.match(/\/app [0-9|a-z]+/i)){
         a=a.replace(/\/app /i,'');
-        return work_app(a);
+        return work_app(a,user_id);
     }
     if(client[user_id].log!="admin"){
         return `[ser-err]unknown command`;
@@ -205,14 +211,10 @@ const matchList  = {
     '&#39;': "'",
 }
 const HtmlFilter = (text) => {
-    let regStr = '(' + Object.keys(matchList).toString() + ')'
-    // ↑ ------------【*提取匹配列表key值*】.【组数转字符串】
-    regStr = regStr.replace(/,/g, ')|(')
-    // ↑ 通过匹配将其更新为正则的字符串类型
-    const regExp = new RegExp(regStr, 'g')
-    // ↑ ------- 字符串 转 正则 方法
-    return text.replace(regExp, match => matchList[match])
-    // ↑ ------ 替换方法 (正则, 当前key => 返回当前被匹配的key值)
+    let regStr = '(' + Object.keys(matchList).toString() + ')';
+    regStr = regStr.replace(/,/g, ')|(');
+    const regExp = new RegExp(regStr, 'g');
+    return text.replace(regExp, match => matchList[match]);
 }
 
 function work_message(a,user_id){
@@ -220,7 +222,9 @@ function work_message(a,user_id){
     console.log(`uid:${user_id} mes:${a}`);
     if(a[0]=='/'){
         var res=work_command(a,user_id);
-        client[user_id].fhs_send(res);
+        if(res){
+            client[user_id].fhs_send(res);
+        }
     }
     else{
         if(!client[user_id].log){
@@ -245,6 +249,7 @@ function server_run(){
     var trash_point=[];
 
     console.log(data);
+    console.log(app_data);
 
     function get_user_list(){
         var usl=[];
@@ -311,7 +316,7 @@ function server_run(){
 
     htm_server.on("request",function(req,res){
         console.log(req.connection.remoteAddress);
-        if(req.headers.referer&&req.headers.referer!="http://192.168.44.96:6803/"){
+        if(req.headers.referer&&req.headers.referer!="103.45.251.70:6803/"){
             res.writeHead(404);
             res.end();
             return;

@@ -1,4 +1,4 @@
-const ws = require('/usr/local/lib/node_modules/ws');
+const ws = require('./packges/ws');
 const fs = require('fs');
 const net = require('net');
 const http = require('http');

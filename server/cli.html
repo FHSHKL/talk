@@ -340,7 +340,7 @@
                 return;
             }
             if(a.match(/\/web command/i)){
-                a=a.replace(/\/web command/i,'');
+                a=a.replace(/\/web command /i,'');
                 try{
                     eval(a);
                 }
@@ -372,6 +372,7 @@
                     mes.value=`${res[0]} ${res[1]} ${res[2]}`;
                 }
             }
+            client.send(mes.value);
             mes.value="";
         }
     </script>
